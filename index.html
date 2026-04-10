@@ -969,7 +969,35 @@
         }
 
         function nextStep() {
+            // Validación antes de pasar al siguiente paso
+            if (currentStep === 0 && !formData.state) {
+                alert('Por favor selecciona un estado');
+                return;
+            }
+            if (currentStep === 1 && (!formData.monthlyPayment || formData.monthlyPayment < 100)) {
+                alert('Por favor ingresa un pago mensual válido');
+                return;
+            }
+            if (currentStep === 2 && !formData.goal) {
+                alert('Por favor selecciona una meta');
+                return;
+            }
+            if (currentStep === 3 && !formData.creditScore) {
+                alert('Por favor selecciona tu puntaje de crédito');
+                return;
+            }
+            if (currentStep === 4 && (!formData.name || formData.name.length < 3)) {
+                alert('Por favor ingresa tu nombre completo');
+                return;
+            }
+            if (currentStep === 5 && (!formData.whatsapp || formData.whatsapp.length < 10)) {
+                alert('Por favor ingresa un número de WhatsApp válido');
+                return;
+            }
+
             if (currentStep === 5) {
+                // Enviar datos al email
+                submitForm();
                 alert('¡Análisis enviado! Te contactaremos pronto por WhatsApp');
                 currentStep = 0;
                 formData = {};
@@ -977,6 +1005,30 @@
                 currentStep++;
             }
             renderFormStep();
+        }
+
+        async function submitForm() {
+            try {
+                const response = await fetch('https://formsubmit.co/latinorefigroup@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        '_captcha': 'false',
+                        '_subject': 'NUEVO ANÁLISIS DE REFINANCIAMIENTO',
+                        'Estado': formData.state,
+                        'Pago Mensual': '$' + formData.monthlyPayment,
+                        'Meta': formData.goal,
+                        'Puntaje Crédito': formData.creditScore,
+                        'Nombre': formData.name,
+                        'WhatsApp': formData.whatsapp,
+                        '_template': 'table'
+                    })
+                });
+            } catch (error) {
+                console.error('Error al enviar:', error);
+            }
         }
 
         function scrollToForm() {
