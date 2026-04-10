@@ -1,996 +1,204 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latino Refi Group AI - Análisis de Refinanciamiento</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to bottom right, #0f172e, #111827, #0f172e);
-            color: #e5e7eb;
-            overflow-x: hidden;
-        }
-
-        .background-orbs {
-            position: fixed;
-            inset: 0;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.1;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 384px;
-            height: 384px;
-            background: #10b981;
-            top: 0;
-            left: 0;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 384px;
-            height: 384px;
-            background: #3b82f6;
-            bottom: 0;
-            right: 0;
-            animation-delay: 1s;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.1; }
-            50% { opacity: 0.15; }
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        /* Navbar */
-        nav {
-            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
-            backdrop-filter: blur(12px);
-            background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            padding: 1rem 0;
-        }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(to bottom right, #4ade80, #10b981, #14b8a6);
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-            font-weight: bold;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .logo-text h1 {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .logo-text p {
-            font-size: 0.75rem;
-            color: #9ca3af;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .phone-link {
-            display: none;
-            align-items: center;
-            gap: 0.5rem;
-            color: #a7f3d0;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .phone-link:hover {
-            color: #d1fae5;
-        }
-
-        @media (min-width: 768px) {
-            .phone-link {
-                display: flex;
-            }
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .btn-primary {
-            background: linear-gradient(to right, #fbbf24, #f59e0b);
-            color: #1f2937;
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(to right, #fcd34d, #fbbf24);
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 3rem 0;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        @media (min-width: 768px) {
-            .hero-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .hero-left h2 {
-            font-size: 2.25rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-
-        @media (min-width: 768px) {
-            .hero-left h2 {
-                font-size: 3rem;
-            }
-        }
-
-        .hero-left p {
-            font-size: 1.25rem;
-            color: #d1d5db;
-            margin-bottom: 2rem;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .btn-emerald {
-            background: linear-gradient(to right, #10b981, #14b8a6, #06b6d4);
-            color: white;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-        }
-
-        .btn-emerald:hover {
-            background: linear-gradient(to right, #059669, #0d9488, #0891b2);
-        }
-
-        .btn-outline {
-            border: 2px solid #fbbf24;
-            color: #fcd34d;
-            background: transparent;
-        }
-
-        .btn-outline:hover {
-            background: rgba(251, 191, 36, 0.2);
-        }
-
-        .social-proof {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .avatars {
-            display: flex;
-            margin-right: -0.5rem;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(to bottom right, #10b981, #14b8a6);
-            border: 2px solid #1e293b;
-            margin-right: -0.75rem;
-        }
-
-        .social-text p {
-            color: white;
-            font-weight: 600;
-        }
-
-        .social-text span {
-            color: #9ca3af;
-            font-size: 0.875rem;
-        }
-
-        /* Form Card */
-        .form-card {
-            background: linear-gradient(to bottom right, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.2);
-        }
-
-        .progress-bar {
-            margin-bottom: 2rem;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            color: #cbd5e1;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 12px;
-            background: rgba(71, 85, 105, 0.5);
-            border-radius: 9999px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, #fbbf24, #10b981, #14b8a6);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-        }
-
-        .form-question h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-question p {
-            color: #9ca3af;
-            margin-bottom: 2rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(71, 85, 105, 0.5);
-            border: 1px solid rgba(71, 85, 105, 0.7);
-            border-radius: 0.5rem;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 1rem;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #10b981;
-            background: rgba(71, 85, 105, 0.7);
-        }
-
-        .form-input::placeholder {
-            color: #6b7280;
-        }
-
-        .option-button {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(71, 85, 105, 0.5);
-            border: 2px solid rgba(71, 85, 105, 0.7);
-            border-radius: 0.5rem;
-            color: #d1d5db;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 0.5rem;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .option-button:hover {
-            border-color: rgba(71, 85, 105, 0.9);
-        }
-
-        .option-button.selected {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            color: white;
-        }
-
-        .btn-next {
-            width: 100%;
-            background: linear-gradient(to right, #10b981, #14b8a6, #06b6d4);
-            color: white;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-            transition: all 0.3s;
-        }
-
-        .btn-next:hover {
-            background: linear-gradient(to right, #059669, #0d9488, #0891b2);
-        }
-
-        /* Sections */
-        .section {
-            padding: 4rem 0;
-            border-top: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .section-title {
-            font-size: 1.875rem;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .savings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .savings-card {
-            background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.2), rgba(30, 41, 59, 0.5));
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .savings-card:hover {
-            border-color: rgba(16, 185, 129, 0.8);
-        }
-
-        .savings-label {
-            color: #cbd5e1;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .savings-value {
-            font-size: 2.25rem;
-            font-weight: bold;
-            background: linear-gradient(to right, #fbbf24, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .benefit-card {
-            text-align: center;
-        }
-
-        .benefit-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 1rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .benefit-icon-1 {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-
-        .benefit-icon-2 {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-        }
-
-        .benefit-icon-3 {
-            background: rgba(6, 182, 212, 0.2);
-            color: #06b6d4;
-        }
-
-        .benefit-card h4 {
-            font-weight: bold;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-
-        .benefit-card p {
-            color: #d1d5db;
-            font-size: 0.875rem;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.1), rgba(30, 41, 59, 0.5));
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-
-        .stars {
-            color: #10b981;
-            margin-bottom: 1rem;
-        }
-
-        .testimonial-text {
-            color: #d1d5db;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .author-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(to bottom right, #10b981, #14b8a6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.875rem;
-        }
-
-        .author-info p {
-            color: white;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        .author-info span {
-            color: #9ca3af;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .faq-section {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: linear-gradient(to right, rgba(16, 185, 129, 0.1), rgba(30, 41, 59, 0.3));
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: white;
-            background: transparent;
-            border: none;
-            width: 100%;
-            text-align: left;
-            transition: all 0.3s;
-        }
-
-        .faq-question:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .faq-answer {
-            padding: 0 1rem 1rem;
-            color: #d1d5db;
-            display: none;
-        }
-
-        .faq-answer.active {
-            display: block;
-        }
-
-        .faq-toggle {
-            transition: transform 0.3s;
-        }
-
-        .faq-toggle.active {
-            transform: rotate(180deg);
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 3rem 0;
-            background: linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .footer-section a {
-            color: #9ca3af;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #10b981;
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #cbd5e1;
-            text-decoration: none;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(71, 85, 105, 0.5);
-            padding-top: 2rem;
-            text-align: center;
-            color: #9ca3af;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latino Refi Group</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+body{
+font-family:'Poppins',sans-serif;
+background:#081120;
+color:white;
+margin:0;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+font-size:42px;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+.form-box{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+max-width:450px;
+margin:auto;
+}
+
+input,select{
+width:100%;
+padding:15px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background:#334155;
+color:white;
+}
+
+button{
+padding:15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.next-btn{
+background:#10b981;
+width:100%;
+}
+
+.back-btn{
+background:#475569;
+width:100%;
+margin-top:10px;
+}
+
+.success{
+display:none;
+text-align:center;
+padding:40px;
+}
+
+.lang{
+position:absolute;
+top:20px;
+right:20px;
+}
+
+.lang button{
+margin-left:5px;
+}
+</style>
 </head>
+
 <body>
-    <div class="background-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
 
-    <nav>
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <div class="logo-icon">$</div>
-                    <div class="logo-text">
-                        <h1>Latino Refi Group</h1>
-                        <p>Mortgage Refinancing Experts</p>
-                    </div>
-                </div>
-                <div class="nav-right">
-                    <a href="tel:+573172728032" class="phone-link">
-                        <span>📞</span>
-                        <span>+57 317 272 8032</span>
-                    </a>
-                    <button class="btn btn-primary" onclick="scrollToForm()">Consulta Gratis</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+<div class="lang">
+<button onclick="setLang('en')">EN</button>
+<button onclick="setLang('es')">ES</button>
+</div>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-left">
-                    <div style="display: inline-block; background: rgba(16, 185, 129, 0.2); border-radius: 0.5rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
-                        <p style="color: #10b981; font-size: 0.875rem; font-weight: 600;">✨ Ayudando a familias latinas desde 2024</p>
-                    </div>
-                    <h2>¿Quieres pagar menos por tu casa?</h2>
-                    <p>Descubre si puedes reducir tu cuota mensual HOY. Nuestros asesores negocian con los bancos por ti para obtener la mejor tasa disponible.</p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-emerald" onclick="scrollToForm()">Análisis Gratis</button>
-                        <a href="tel:+573172728032" style="text-decoration: none;">
-                            <button class="btn btn-outline">Llamar Ahora</button>
-                        </a>
-                    </div>
-                    <div class="social-proof">
-                        <div class="avatars">
-                            <div class="avatar"></div>
-                            <div class="avatar"></div>
-                            <div class="avatar"></div>
-                            <div class="avatar"></div>
-                        </div>
-                        <div class="social-text">
-                            <p>5,000+ familias latinas</p>
-                            <span>confían en nosotros</span>
-                        </div>
-                    </div>
-                </div>
+<div class="hero">
+<h1 id="title">Check If You Qualify To Lower Your Mortgage</h1>
+<p id="desc">It takes less than 30 seconds. No impact on your credit.</p>
+</div>
 
-                <div class="form-card" id="formCard">
-                    <div class="progress-bar">
-                        <div class="progress-info">
-                            <span id="stepText">Paso 1 de 6</span>
-                            <span id="percentText">17%</span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="progressFill" style="width: 17%"></div>
-                        </div>
-                    </div>
+<div class="container">
 
-                    <div class="form-question">
-                        <h3 id="questionTitle">¿En qué estado de USA vives?</h3>
-                        <p id="questionDesc">Esto nos ayuda a entender tu mercado local</p>
-                    </div>
+<div class="form-box" id="formBox">
 
-                    <div id="formContent"></div>
+<form id="leadForm" action="https://formsubmit.co/latinorefigroup@gmail.com" method="POST">
 
-                    <button class="btn-next" onclick="nextStep()">
-                        <span id="btnText">Siguiente</span>
-                        <span>›</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_subject" value="NEW REFI LEAD">
+<input type="hidden" name="_template" value="table">
 
-    <section class="section" style="background: linear-gradient(to right, rgba(30, 41, 59, 0.5), rgba(16, 185, 129, 0.2), rgba(30, 41, 59, 0.5));">
-        <div class="container">
-            <h3 class="section-title">¿Cuánto podrías ahorrar?</h3>
-            <div class="savings-grid">
-                <div class="savings-card">
-                    <div class="savings-label">Ahorro mensual promedio</div>
-                    <div class="savings-value">$250+</div>
-                </div>
-                <div class="savings-card">
-                    <div class="savings-label">Reducción de tasa promedio</div>
-                    <div class="savings-value">1.5%</div>
-                </div>
-                <div class="savings-card">
-                    <div class="savings-label">Tiempo para cerrar</div>
-                    <div class="savings-value">30-45</div>
-                    <div style="color: #9ca3af; font-size: 0.75rem;">días</div>
-                </div>
-                <div class="savings-card">
-                    <div class="savings-label">Costo inicial para ti</div>
-                    <div class="savings-value">$0</div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="step" id="step1">
+<input type="text" name="Name" id="name" placeholder="Full Name" required>
+<button type="button" class="next-btn" onclick="nextStep(1)">Next</button>
+</div>
 
-    <section class="section" style="background: linear-gradient(to right, rgba(30, 41, 59, 0.5), rgba(37, 99, 235, 0.2), rgba(30, 41, 59, 0.5));">
-        <div class="container">
-            <h3 class="section-title">¿Por qué confiar en nosotros?</h3>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon benefit-icon-1">⚡</div>
-                    <h4>Rápido & Eficiente</h4>
-                    <p>Análisis en 30 segundos con IA avanzada. Lo que toma meses en un banco, nosotros lo hacemos en días.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon benefit-icon-2">🔒</div>
-                    <h4>100% Seguro</h4>
-                    <p>Tus datos están protegidos y encriptados. Trabajamos solo con lenders autorizados.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon benefit-icon-3">🛡️</div>
-                    <h4>Sin Compromiso</h4>
-                    <p>Análisis gratis, sin costo, sin sorpresas. Tú decides si continuar o no.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="step" id="step2" style="display:none;">
+<input type="tel" name="Phone" id="phone" placeholder="Phone Number" required>
+<button type="button" class="next-btn" onclick="nextStep(2)">Next</button>
+<button type="button" class="back-btn" onclick="prevStep(2)">Back</button>
+</div>
 
-    <section class="section" style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.5), rgba(30, 41, 59, 0.5));">
-        <div class="container">
-            <h3 class="section-title">Lo que dicen nuestros clientes</h3>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <div class="testimonial-text">"Pasamos de pagar $2,100 al mes a $1,780. ¡$320 más en nuestro bolsillo cada mes!"</div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">MR</div>
-                        <div class="author-info">
-                            <p>María & Roberto González</p>
-                            <span>📍 Miami, Florida</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <div class="testimonial-text">"El proceso fue increíblemente fácil. Sin papeleos, sin visitas al banco. Maka lo hizo todo."</div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">CM</div>
-                        <div class="author-info">
-                            <p>Carlos Mendoza</p>
-                            <span>📍 Houston, Texas</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <div class="testimonial-text">"Ahorramos $450 mensuales y pudimos refinanciar en solo 35 días. Totalmente recomendado."</div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">AR</div>
-                        <div class="author-info">
-                            <p>Ana Rodríguez</p>
-                            <span>📍 Los Angeles, California</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="step" id="step3" style="display:none;">
+<select name="Goal" id="goal">
+<option value="">Select Goal</option>
+<option>Lower Payment</option>
+<option>Cash Out</option>
+<option>Both</option>
+</select>
+<button type="button" class="next-btn" onclick="nextStep(3)">Next</button>
+<button type="button" class="back-btn" onclick="prevStep(3)">Back</button>
+</div>
 
-    <section class="section" style="background: linear-gradient(to right, rgba(30, 41, 59, 0.5), rgba(20, 184, 166, 0.2), rgba(30, 41, 59, 0.5));">
-        <div class="container">
-            <h3 class="section-title">Preguntas Frecuentes</h3>
-            <div class="faq-section">
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        ¿Cuánto cuesta la evaluación?
-                        <span class="faq-toggle">▼</span>
-                    </button>
-                    <div class="faq-answer">La evaluación es completamente gratis. No hay costo oculto ni sorpresas. Solo queremos ayudarte a ahorrar dinero.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        ¿Qué puntaje de crédito necesito?
-                        <span class="faq-toggle">▼</span>
-                    </button>
-                    <div class="faq-answer">Generalmente, necesitas un puntaje de 620 o superior. Pero incluso si tu puntaje es más bajo, podemos explorar opciones contigo.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        ¿Cuánto tiempo toma el proceso?
-                        <span class="faq-toggle">▼</span>
-                    </button>
-                    <div class="faq-answer">En promedio, el proceso toma entre 30 a 45 días desde que completas tu evaluación hasta que cerramos tu refinanciamiento.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        ¿Qué documentos necesito?
-                        <span class="faq-toggle">▼</span>
-                    </button>
-                    <div class="faq-answer">Necesitarás: identificación, comprobante de ingresos (últimas 2 nóminas), extractos bancarios y documentación de tu hipoteca actual.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        ¿Sirven en todos los estados?
-                        <span class="faq-toggle">▼</span>
-                    </button>
-                    <div class="faq-answer">Trabajamos en la mayoría de los estados de USA. Algunos estados tienen restricciones, pero podemos verificar tu elegibilidad en la evaluación.</div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="step" id="step4" style="display:none;">
+<select name="Credit">
+<option value="">Credit Score</option>
+<option>Excellent</option>
+<option>Good</option>
+<option>Fair</option>
+<option>Poor</option>
+</select>
+<button type="submit" class="next-btn">See If I Qualify</button>
+<button type="button" class="back-btn" onclick="prevStep(4)">Back</button>
+</div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h4>Contacto</h4>
-                    <a href="tel:+573172728032" class="contact-link">
-                        <span>📞</span>
-                        <span>+57 317 272 8032</span>
-                    </a>
-                    <a href="mailto:latinorefigroup@gmail.com" class="contact-link">
-                        <span>✉️</span>
-                        <span>latinorefigroup@gmail.com</span>
-                    </a>
-                </div>
-                <div class="footer-section">
-                    <h4>Empresa</h4>
-                    <a href="#how">Cómo Funciona</a>
-                    <a href="#benefits">Beneficios</a>
-                    <a href="#faq">FAQ</a>
-                </div>
-                <div class="footer-section">
-                    <h4>Legal</h4>
-                    <a href="#">Política de Privacidad</a>
-                    <a href="#">Términos de Servicio</a>
-                    <a href="#">NMLS Consumer Access</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>Latino Refi Group © 2026 | Ayudando a la comunidad latina en USA</p>
-            </div>
-        </div>
-    </footer>
+</form>
 
-    <script>
-        const states = ["Florida", "Texas", "California", "New York", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "Otro"];
-        const goals = ["Bajar mi pago mensual", "Sacar dinero en efectivo (Cash-out)", "Ambas opciones"];
-        const creditScores = ["Excelente (750+)", "Bueno (700-749)", "Regular (650-699)", "No sé"];
-        const questions = [
-            { title: "¿En qué estado de USA vives?", desc: "Esto nos ayuda a entender tu mercado local" },
-            { title: "¿Cuál es tu pago mensual actual?", desc: "Aproximadamente, en dólares" },
-            { title: "¿Cuál es tu meta?", desc: "¿Qué quieres lograr con tu refinanciamiento?" },
-            { title: "¿Cómo calificarías tu puntaje de crédito?", desc: "Esto nos ayuda a predecir tus opciones" },
-            { title: "¿Cuál es tu nombre?", desc: "Para personalizar tu análisis" },
-            { title: "¿A qué WhatsApp te enviamos tu reporte?", desc: "Recibirás tu análisis personalizado" }
-        ];
+</div>
 
-        let currentStep = 0;
-        let formData = {};
+<div class="success" id="successBox">
+<h2>✅ Submitted!</h2>
+<p>We will contact you shortly.</p>
+</div>
 
-        function renderFormStep() {
-            const content = document.getElementById('formContent');
-            content.innerHTML = '';
+</div>
 
-            document.getElementById('questionTitle').textContent = questions[currentStep].title;
-            document.getElementById('questionDesc').textContent = questions[currentStep].desc;
-            document.getElementById('stepText').textContent = `Paso ${currentStep + 1} de 6`;
-            document.getElementById('percentText').textContent = Math.round(((currentStep + 1) / 6) * 100) + '%';
-            document.getElementById('progressFill').style.width = ((currentStep + 1) / 6) * 100 + '%';
-            document.getElementById('btnText').textContent = currentStep === 5 ? 'Enviar Análisis' : 'Siguiente';
+<script>
 
-            if (currentStep === 0) {
-                states.forEach(state => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button' + (formData.state === state ? ' selected' : '');
-                    btn.textContent = state;
-                    btn.onclick = () => {
-                        formData.state = state;
-                        renderFormStep();
-                    };
-                    content.appendChild(btn);
-                });
-            } else if (currentStep === 1) {
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.className = 'form-input';
-                input.placeholder = 'Ej: 1500';
-                input.value = formData.monthlyPayment || '';
-                input.onchange = (e) => { formData.monthlyPayment = e.target.value; };
-                content.appendChild(input);
-            } else if (currentStep === 2) {
-                goals.forEach(goal => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button' + (formData.goal === goal ? ' selected' : '');
-                    btn.textContent = goal;
-                    btn.onclick = () => {
-                        formData.goal = goal;
-                        renderFormStep();
-                    };
-                    content.appendChild(btn);
-                });
-            } else if (currentStep === 3) {
-                creditScores.forEach(score => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button' + (formData.creditScore === score ? ' selected' : '');
-                    btn.textContent = score;
-                    btn.onclick = () => {
-                        formData.creditScore = score;
-                        renderFormStep();
-                    };
-                    content.appendChild(btn);
-                });
-            } else if (currentStep === 4) {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'form-input';
-                input.placeholder = 'Tu nombre completo';
-                input.value = formData.name || '';
-                input.onchange = (e) => { formData.name = e.target.value; };
-                content.appendChild(input);
-            } else if (currentStep === 5) {
-                const input = document.createElement('input');
-                input.type = 'tel';
-                input.className = 'form-input';
-                input.placeholder = '+1 (555) 123-4567';
-                input.value = formData.whatsapp || '';
-                input.onchange = (e) => { formData.whatsapp = e.target.value; };
-                content.appendChild(input);
-            }
-        }
+function nextStep(step){
 
-        function nextStep() {
-            if (currentStep === 5) {
-                alert('¡Análisis enviado! Te contactaremos pronto por WhatsApp');
-                currentStep = 0;
-                formData = {};
-            } else {
-                currentStep++;
-            }
-            renderFormStep();
-        }
+if(step === 1){
+let name = document.getElementById("name").value;
+if(name.length < 3){
+alert("Enter valid name");
+return;
+}
+}
 
-        function scrollToForm() {
-            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
-        }
+if(step === 2){
+let phone = document.getElementById("phone").value;
+if(phone.length < 8){
+alert("Enter valid phone");
+return;
+}
+}
 
-        function toggleFaq(btn) {
-            const answer = btn.nextElementSibling;
-            const toggle = btn.querySelector('.faq-toggle');
-            answer.classList.toggle('active');
-            toggle.classList.toggle('active');
-        }
+document.getElementById("step"+step).style.display="none";
+document.getElementById("step"+(step+1)).style.display="block";
+}
 
-        renderFormStep();
-    </script>
+function prevStep(step){
+document.getElementById("step"+step).style.display="none";
+document.getElementById("step"+(step-1)).style.display="block";
+}
+
+document.getElementById("leadForm").addEventListener("submit", function(){
+document.getElementById("formBox").style.display="none";
+document.getElementById("successBox").style.display="block";
+});
+
+function setLang(lang){
+
+if(lang==="es"){
+document.getElementById("title").innerText="Verifica Si Calificas Para Bajar Tu Hipoteca";
+document.getElementById("desc").innerText="Toma menos de 30 segundos. Sin impacto en tu crédito.";
+}
+else{
+location.reload();
+}
+
+}
+
+</script>
+
 </body>
 </html>
