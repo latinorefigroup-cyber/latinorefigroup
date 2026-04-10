@@ -8,9 +8,12 @@ const translations = {
             contact: "Contact"
         },
         hero: {
-            title: "AI-Powered Refinancing Analysis",
-            subtitle: "Get personalized refinancing options in minutes",
+            title: "Want to Pay Less for Your Home?",
+            subtitle: "Find out if you can reduce your monthly payment TODAY. Our advisors negotiate with banks on your behalf to get the best available rate.",
             cta: "Free Analysis",
+            badge: "✨ Helping Latino families since 2024",
+            socialFamilies: "5,000+ Latino families",
+            socialTrust: "trust us",
             features: ["No Credit Impact", "30-Second Process", "Expert Guidance"]
         },
         how: {
@@ -81,9 +84,12 @@ const translations = {
             contact: "Contacto"
         },
         hero: {
-            title: "Análisis de Refinanciamiento con IA",
-            subtitle: "Obtén opciones personalizadas de refinanciamiento en minutos",
+            title: "¿Quieres pagar menos por tu casa?",
+            subtitle: "Descubre si puedes reducir tu cuota mensual HOY. Nuestros asesores negocian con los bancos por ti para obtener la mejor tasa disponible.",
             cta: "Análisis Gratis",
+            badge: "✨ Ayudando a familias latinas desde 2024",
+            socialFamilies: "5,000+ familias latinas",
+            socialTrust: "confían en nosotros",
             features: ["Sin Impacto Crediticio", "Proceso de 30 Segundos", "Guía Experta"]
         },
         how: {
@@ -95,11 +101,11 @@ const translations = {
             ]
         },
         benefits: {
-            title: "¿Por Qué Elegir Latino Refi Group?",
+            title: "Why Trust Us?",
             items: [
-                { title: "Pagos Mensuales Más Bajos", desc: "Ahorra cientos mensualmente" },
-                { title: "Opciones de Cash Out", desc: "Accede al valor de tu hogar" },
-                { title: "Soporte Experto", desc: "Especialistas bilingües en hipotecas" }
+                { title: "Fast & Efficient", desc: "Analysis in 30 seconds with advanced AI. What takes months at a bank, we do in days." },
+                { title: "100% Secure", desc: "Your data is protected and encrypted. We only work with authorized lenders." },
+                { title: "No Commitment", desc: "Free analysis, no cost, no surprises. You decide whether to continue or not." }
             ]
         },
         savings: {
@@ -152,41 +158,27 @@ const translations = {
 
 function applyLanguage(lang) {
     currentLang = lang;
+    document.documentElement.lang = lang; // Update HTML lang attribute
     const t = translations[lang];
 
     // Navbar
     document.querySelector('.phone-link span:last-child').textContent = t.nav.phone;
+    document.querySelector('.btn-primary').textContent = t.hero.cta; // Consulta Gratis -> Free Analysis
 
     // Hero section
-    document.querySelector('.hero h1').textContent = t.hero.title;
-    document.querySelector('.hero p').textContent = t.hero.subtitle;
-    document.querySelector('.hero .btn-primary').textContent = t.hero.cta;
+    document.querySelector('.hero-left p:first-child').textContent = t.hero.badge;
+    document.querySelector('.hero-left h2').textContent = t.hero.title;
+    document.querySelector('.hero-left p:nth-child(3)').textContent = t.hero.subtitle; // The subtitle p
+    document.querySelector('.hero-buttons .btn-emerald').textContent = t.hero.cta;
+    document.querySelector('.hero-buttons .btn-outline').textContent = t.nav.phone; // Call Now
 
-    // Features
-    const features = document.querySelectorAll('.feature-item');
-    t.hero.features.forEach((feature, index) => {
-        if (features[index]) features[index].textContent = feature;
-    });
+    // Social proof
+    const socialP = document.querySelector('.social-text p');
+    const socialSpan = document.querySelector('.social-text span');
+    if (socialP) socialP.textContent = t.hero.socialFamilies;
+    if (socialSpan) socialSpan.textContent = t.hero.socialTrust;
 
-    // How it works
-    document.querySelector('#how h3').textContent = t.how.title;
-    const steps = document.querySelectorAll('.step h4');
-    const stepDescs = document.querySelectorAll('.step p');
-    t.how.steps.forEach((step, index) => {
-        if (steps[index]) steps[index].textContent = step.title;
-        if (stepDescs[index]) stepDescs[index].textContent = step.desc;
-    });
-
-    // Benefits
-    document.querySelector('#benefits h3').textContent = t.benefits.title;
-    const benefitTitles = document.querySelectorAll('.benefit-card h4');
-    const benefitDescs = document.querySelectorAll('.benefit-card p');
-    t.benefits.items.forEach((benefit, index) => {
-        if (benefitTitles[index]) benefitTitles[index].textContent = benefit.title;
-        if (benefitDescs[index]) benefitDescs[index].textContent = benefit.desc;
-    });
-
-    // Savings
+    // Savings section
     document.querySelector('.savings-grid').previousElementSibling.textContent = t.savings.title;
     const savingsLabels = document.querySelectorAll('.savings-label');
     if (savingsLabels[0]) savingsLabels[0].textContent = t.savings.monthly;
@@ -194,13 +186,28 @@ function applyLanguage(lang) {
     if (savingsLabels[2]) savingsLabels[2].textContent = t.savings.time;
     if (savingsLabels[3]) savingsLabels[3].textContent = t.savings.cost;
 
-    // FAQ
-    document.querySelector('#faq h3').textContent = t.faq.title;
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    const faqAnswers = document.querySelectorAll('.faq-answer');
+    // Benefits section
+    const benefitsTitle = document.querySelectorAll('.section-title')[1]; // Second section-title is benefits
+    if (benefitsTitle) benefitsTitle.textContent = t.benefits.title;
+    const benefitCards = document.querySelectorAll('.benefit-card');
+    t.benefits.items.forEach((benefit, index) => {
+        if (benefitCards[index]) {
+            benefitCards[index].querySelector('h4').textContent = benefit.title;
+            benefitCards[index].querySelector('p').textContent = benefit.desc;
+        }
+    });
+
+    // Testimonials section - keep in Spanish for now as they are testimonials
+
+    // FAQ section
+    const faqTitle = document.querySelectorAll('.section-title')[3]; // Fourth section-title is FAQ
+    if (faqTitle) faqTitle.textContent = t.faq.title;
+    const faqItems = document.querySelectorAll('.faq-item');
     t.faq.questions.forEach((faq, index) => {
-        if (faqQuestions[index]) faqQuestions[index].childNodes[0].textContent = faq.q;
-        if (faqAnswers[index]) faqAnswers[index].textContent = faq.a;
+        if (faqItems[index]) {
+            faqItems[index].querySelector('.faq-question').childNodes[0].textContent = faq.q;
+            faqItems[index].querySelector('.faq-answer').textContent = faq.a;
+        }
     });
 
     // Footer
@@ -212,6 +219,7 @@ function applyLanguage(lang) {
 
     // Update form data
     updateFormData();
+    renderFormStep();
 }
 
 function updateFormData() {
