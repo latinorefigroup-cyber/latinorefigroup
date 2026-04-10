@@ -631,6 +631,35 @@
         .hidden {
             display: none;
         }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 1rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: transparent;
+            color: #a7f3d0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: #d1fae5;
+        }
+
+        .lang-btn.active {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
     </style>
 </head>
 <body>
@@ -643,11 +672,7 @@
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <div class="logo-icon">$</div>
-                    <div class="logo-text">
-                        <h1>Latino Refi Group</h1>
-                        <p>Mortgage Refinancing Experts</p>
-                    </div>
+                    <img src="logo.svg" alt="Latino Refi Group Logo" style="height: 50px; width: auto;">
                 </div>
                 <div class="nav-right">
                     <a href="tel:+573172728032" class="phone-link">
@@ -881,168 +906,6 @@
         </div>
     </footer>
 
-    <script>
-        const states = ["Florida", "Texas", "California", "New York", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "Otro"];
-        const goals = ["Bajar mi pago mensual", "Sacar dinero en efectivo (Cash-out)", "Ambas opciones"];
-        const creditScores = ["Excelente (750+)", "Bueno (700-749)", "Regular (650-699)", "No sé"];
-        const questions = [
-            { title: "¿En qué estado de USA vives?", desc: "Esto nos ayuda a entender tu mercado local" },
-            { title: "¿Cuál es tu pago mensual actual?", desc: "Aproximadamente, en dólares" },
-            { title: "¿Cuál es tu meta?", desc: "¿Qué quieres lograr con tu refinanciamiento?" },
-            { title: "¿Cómo calificarías tu puntaje de crédito?", desc: "Esto nos ayuda a predecir tus opciones" },
-            { title: "¿Cuál es tu nombre?", desc: "Para personalizar tu análisis" },
-            { title: "¿A qué WhatsApp te enviamos tu reporte?", desc: "Recibirás tu análisis personalizado" }
-        ];
-
-        let currentStep = 0;
-        let formData = {};
-
-        function renderFormStep() {
-            const content = document.getElementById('formContent');
-            content.innerHTML = '';
-
-            document.getElementById('questionTitle').textContent = questions[currentStep].title;
-            document.getElementById('questionDesc').textContent = questions[currentStep].desc;
-            document.getElementById('stepText').textContent = `Paso ${currentStep + 1} de 6`;
-            document.getElementById('percentText').textContent = Math.round(((currentStep + 1) / 6) * 100) + '%';
-            document.getElementById('progressFill').style.width = ((currentStep + 1) / 6) * 100 + '%';
-            document.getElementById('btnText').textContent = currentStep === 5 ? 'Enviar Análisis' : 'Siguiente';
-
-            if (currentStep === 0) {
-                states.forEach(state => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button' + (formData.state === state ? ' selected' : '');
-                    btn.textContent = state;
-                    btn.onclick = () => {
-                        formData.state = state;
-                        renderFormStep();
-                    };
-                    content.appendChild(btn);
-                });
-            } else if (currentStep === 1) {
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.className = 'form-input';
-                input.placeholder = 'Ej: 1500';
-                input.value = formData.monthlyPayment || '';
-                input.onchange = (e) => { formData.monthlyPayment = e.target.value; };
-                content.appendChild(input);
-            } else if (currentStep === 2) {
-                goals.forEach(goal => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button' + (formData.goal === goal ? ' selected' : '');
-                    btn.textContent = goal;
-                    btn.onclick = () => {
-                        formData.goal = goal;
-                        renderFormStep();
-                    };
-                    content.appendChild(btn);
-                });
-            } else if (currentStep === 3) {
-                creditScores.forEach(score => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button' + (formData.creditScore === score ? ' selected' : '');
-                    btn.textContent = score;
-                    btn.onclick = () => {
-                        formData.creditScore = score;
-                        renderFormStep();
-                    };
-                    content.appendChild(btn);
-                });
-            } else if (currentStep === 4) {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'form-input';
-                input.placeholder = 'Tu nombre completo';
-                input.value = formData.name || '';
-                input.onchange = (e) => { formData.name = e.target.value; };
-                content.appendChild(input);
-            } else if (currentStep === 5) {
-                const input = document.createElement('input');
-                input.type = 'tel';
-                input.className = 'form-input';
-                input.placeholder = '+1 (555) 123-4567';
-                input.value = formData.whatsapp || '';
-                input.onchange = (e) => { formData.whatsapp = e.target.value; };
-                content.appendChild(input);
-            }
-        }
-
-        function nextStep() {
-            // Validación antes de pasar al siguiente paso
-            if (currentStep === 0 && !formData.state) {
-                alert('Por favor selecciona un estado');
-                return;
-            }
-            if (currentStep === 1 && (!formData.monthlyPayment || formData.monthlyPayment < 100)) {
-                alert('Por favor ingresa un pago mensual válido');
-                return;
-            }
-            if (currentStep === 2 && !formData.goal) {
-                alert('Por favor selecciona una meta');
-                return;
-            }
-            if (currentStep === 3 && !formData.creditScore) {
-                alert('Por favor selecciona tu puntaje de crédito');
-                return;
-            }
-            if (currentStep === 4 && (!formData.name || formData.name.length < 3)) {
-                alert('Por favor ingresa tu nombre completo');
-                return;
-            }
-            if (currentStep === 5 && (!formData.whatsapp || formData.whatsapp.length < 10)) {
-                alert('Por favor ingresa un número de WhatsApp válido');
-                return;
-            }
-
-            if (currentStep === 5) {
-                // Enviar datos al email
-                submitForm();
-                alert('¡Análisis enviado! Te contactaremos pronto por WhatsApp');
-                currentStep = 0;
-                formData = {};
-            } else {
-                currentStep++;
-            }
-            renderFormStep();
-        }
-
-        async function submitForm() {
-            try {
-                const response = await fetch('https://formsubmit.co/latinorefigroup@gmail.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        '_captcha': 'false',
-                        '_subject': 'NUEVO ANÁLISIS DE REFINANCIAMIENTO',
-                        'Estado': formData.state,
-                        'Pago Mensual': '$' + formData.monthlyPayment,
-                        'Meta': formData.goal,
-                        'Puntaje Crédito': formData.creditScore,
-                        'Nombre': formData.name,
-                        'WhatsApp': formData.whatsapp,
-                        '_template': 'table'
-                    })
-                });
-            } catch (error) {
-                console.error('Error al enviar:', error);
-            }
-        }
-
-        function scrollToForm() {
-            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function toggleFaq(btn) {
-            const answer = btn.nextElementSibling;
-            const toggle = btn.querySelector('.faq-toggle');
-            answer.classList.toggle('active');
-            toggle.classList.toggle('active');
-        }
-
-        renderFormStep();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
