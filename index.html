@@ -130,7 +130,7 @@ margin-left:5px;
 </div>
 
 <div class="step" id="step4" style="display:none;">
-<select name="Credit">
+<select name="Credit" id="credit">
 <option value="">Credit Score</option>
 <option>Excellent</option>
 <option>Good</option>
@@ -154,49 +154,131 @@ margin-left:5px;
 
 <script>
 
+let currentLang = 'en';
+
+const translations = {
+  en: {
+    title: "Check If You Qualify To Lower Your Mortgage",
+    desc: "It takes less than 30 seconds. No impact on your credit.",
+    name_placeholder: "Full Name",
+    phone_placeholder: "Phone Number",
+    select_goal: "Select Goal",
+    lower_payment: "Lower Payment",
+    cash_out: "Cash Out",
+    both: "Both",
+    credit_score: "Credit Score",
+    excellent: "Excellent",
+    good: "Good",
+    fair: "Fair",
+    poor: "Poor",
+    next_btn: "Next",
+    back_btn: "Back",
+    submit_btn: "See If I Qualify",
+    success_title: "✅ Submitted!",
+    success_msg: "We will contact you shortly.",
+    error_name: "Enter valid name",
+    error_phone: "Enter valid phone"
+  },
+  es: {
+    title: "Verifica Si Calificas Para Bajar Tu Hipoteca",
+    desc: "Toma menos de 30 segundos. Sin impacto en tu crédito.",
+    name_placeholder: "Nombre Completo",
+    phone_placeholder: "Número de Teléfono",
+    select_goal: "Selecciona Tu Objetivo",
+    lower_payment: "Bajar Pago",
+    cash_out: "Efectivo",
+    both: "Ambos",
+    credit_score: "Puntuación de Crédito",
+    excellent: "Excelente",
+    good: "Bueno",
+    fair: "Regular",
+    poor: "Pobre",
+    next_btn: "Siguiente",
+    back_btn: "Atrás",
+    submit_btn: "Ver Si Califico",
+    success_title: "✅ ¡Enviado!",
+    success_msg: "Nos comunicaremos pronto contigo.",
+    error_name: "Ingresa un nombre válido",
+    error_phone: "Ingresa un teléfono válido"
+  }
+};
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  
+  document.getElementById("title").innerText = t.title;
+  document.getElementById("desc").innerText = t.desc;
+  document.getElementById("name").placeholder = t.name_placeholder;
+  document.getElementById("phone").placeholder = t.phone_placeholder;
+  document.getElementById("goal").childNodes[0].innerText = t.select_goal;
+  document.getElementById("goal").childNodes[1].innerText = t.lower_payment;
+  document.getElementById("goal").childNodes[3].innerText = t.cash_out;
+  document.getElementById("goal").childNodes[5].innerText = t.both;
+  document.getElementById("credit").childNodes[0].innerText = t.credit_score;
+  document.getElementById("credit").childNodes[1].innerText = t.excellent;
+  document.getElementById("credit").childNodes[3].innerText = t.good;
+  document.getElementById("credit").childNodes[5].innerText = t.fair;
+  document.getElementById("credit").childNodes[7].innerText = t.poor;
+  
+  updateButtonTexts();
+  updateSuccessMessage();
+}
+
+function updateButtonTexts() {
+  const t = translations[currentLang];
+  document.querySelectorAll(".next-btn").forEach(btn => {
+    btn.innerText = btn.type === "submit" ? t.submit_btn : t.next_btn;
+  });
+  document.querySelectorAll(".back-btn").forEach(btn => {
+    btn.innerText = t.back_btn;
+  });
+}
+
+function updateSuccessMessage() {
+  const t = translations[currentLang];
+  document.querySelector(".success h2").innerText = t.success_title;
+  document.querySelector(".success p").innerText = t.success_msg;
+}
+
 function nextStep(step){
+  const t = translations[currentLang];
+  
+  if(step === 1){
+    let name = document.getElementById("name").value;
+    if(name.length < 3){
+      alert(t.error_name);
+      return;
+    }
+  }
 
-if(step === 1){
-let name = document.getElementById("name").value;
-if(name.length < 3){
-alert("Enter valid name");
-return;
-}
-}
+  if(step === 2){
+    let phone = document.getElementById("phone").value;
+    if(phone.length < 8){
+      alert(t.error_phone);
+      return;
+    }
+  }
 
-if(step === 2){
-let phone = document.getElementById("phone").value;
-if(phone.length < 8){
-alert("Enter valid phone");
-return;
-}
-}
-
-document.getElementById("step"+step).style.display="none";
-document.getElementById("step"+(step+1)).style.display="block";
+  document.getElementById("step"+step).style.display="none";
+  document.getElementById("step"+(step+1)).style.display="block";
 }
 
 function prevStep(step){
-document.getElementById("step"+step).style.display="none";
-document.getElementById("step"+(step-1)).style.display="block";
+  document.getElementById("step"+step).style.display="none";
+  document.getElementById("step"+(step-1)).style.display="block";
 }
 
 document.getElementById("leadForm").addEventListener("submit", function(){
-document.getElementById("formBox").style.display="none";
-document.getElementById("successBox").style.display="block";
+  document.getElementById("formBox").style.display="none";
+  document.getElementById("successBox").style.display="block";
 });
 
 function setLang(lang){
-
-if(lang==="es"){
-document.getElementById("title").innerText="Verifica Si Calificas Para Bajar Tu Hipoteca";
-document.getElementById("desc").innerText="Toma menos de 30 segundos. Sin impacto en tu crédito.";
-}
-else{
-location.reload();
+  applyLanguage(lang);
 }
 
-}
+applyLanguage('en');
 
 </script>
 
